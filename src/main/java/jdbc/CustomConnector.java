@@ -15,15 +15,10 @@ public class CustomConnector {
         }
     }
 
-    public Connection getConnection() {
+    public Connection getConnection(String url, String name, String password) {
         try {
-            Properties properties = new Properties();
-            properties.load(CustomConnector.class.getClassLoader().getResourceAsStream("app.properties"));
-            String url = properties.getProperty("postgres.url");
-            String user = properties.getProperty("postgres.name");
-            String password = properties.getProperty("postgres.password");
-            return DriverManager.getConnection(url, user, password);
-        } catch (IOException | SQLException e) {
+            return DriverManager.getConnection(url, name, password);
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
