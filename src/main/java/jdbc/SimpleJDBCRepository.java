@@ -27,12 +27,12 @@ public class SimpleJDBCRepository {
     private static final String FIND_ALL_USER_SQL = "select * from myusers;";
 
     public Long createUser(User user) {
-        long id = 0L;
+        long id = 1L;
         try (var connection = CustomDataSource.getInstance().getConnection();
             var statement = connection.prepareStatement(CREATE_USER_SQL, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, user.getFirstName());
-            statement.setString(2, user.getLastName());
-            statement.setInt(3, user.getAge());
+            statement.setObject(1, user.getFirstName());
+            statement.setObject(2, user.getLastName());
+            statement.setObject(3, user.getAge());
             ResultSet generatedKeys = statement.getGeneratedKeys();
 
             if (generatedKeys.next()) {
