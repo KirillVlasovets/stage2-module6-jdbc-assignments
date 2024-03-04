@@ -27,6 +27,7 @@ public class SimpleJDBCRepository {
     private static final String FIND_ALL_USER_SQL = "select * from myusers;";
 
     public Long createUser(User user) {
+        Long id = null;
         try (var connection = CustomDataSource.getInstance().getConnection();
             var statement = connection.prepareStatement(CREATE_USER_SQL, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, user.getFirstName());
@@ -35,13 +36,12 @@ public class SimpleJDBCRepository {
             ResultSet generatedKeys = statement.getGeneratedKeys();
 
             if (generatedKeys.next()) {
-                return generatedKeys.getLong(1);
-            } else {
-                throw new SQLException("User was not created. Id was not generated.");
+                id = generatedKeys.getLong(1);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return id;
     }
 
     public User findUserById(Long userId) {
