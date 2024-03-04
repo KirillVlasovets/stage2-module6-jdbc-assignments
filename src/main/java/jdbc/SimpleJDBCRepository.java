@@ -45,18 +45,18 @@ public class SimpleJDBCRepository {
     }
 
     public User findUserById(Long userId) {
+        User user = null;
         try (var connection = CustomDataSource.getInstance().getConnection();
               var statement = connection.prepareStatement(FIND_USER_BY_ID_SQL)) {
             statement.setLong(1, userId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return buildUser(resultSet);
-            } else {
-                throw new SQLException(String.format("User with id = %d was not found.", userId));
+                user = buildUser(resultSet);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return user;
     }
 
     public User findUserByName(String userName) {
@@ -67,8 +67,6 @@ public class SimpleJDBCRepository {
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 user = buildUser(resultSet);
-            } else {
-                throw new SQLException(String.format("User with id = %s was not found.", userName));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
