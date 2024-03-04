@@ -27,7 +27,7 @@ public class SimpleJDBCRepository {
     private static final String FIND_ALL_USER_SQL = "select * from myusers;";
 
     public Long createUser(User user) {
-        Long id = null;
+        long id = 0L;
         try (var connection = CustomDataSource.getInstance().getConnection();
             var statement = connection.prepareStatement(CREATE_USER_SQL, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, user.getFirstName());
