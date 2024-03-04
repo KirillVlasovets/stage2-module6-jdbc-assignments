@@ -33,6 +33,7 @@ public class SimpleJDBCRepository {
             statement.setObject(1, user.getFirstName());
             statement.setObject(2, user.getLastName());
             statement.setObject(3, user.getAge());
+            statement.execute();
             ResultSet generatedKeys = statement.getGeneratedKeys();
 
             if (generatedKeys.next()) {
