@@ -21,7 +21,6 @@ public class CustomDataSource implements DataSource {
     private final String url;
     private final String name;
     private final String password;
-    private CustomConnector connector = new CustomConnector();
 
     private CustomDataSource(String driver, String url, String password, String name) {
         this.driver = driver;
@@ -49,12 +48,12 @@ public class CustomDataSource implements DataSource {
 
     @Override
     public Connection getConnection() throws SQLException {
-        return this.connector.getConnection(this.url, this.name, this.password);
+        return new CustomConnector().getConnection(this.url, this.name, this.password);
     }
 
     @Override
-    public Connection getConnection(String username, String password) throws SQLException {
-        return this.connector.getConnection(this.url, username, password);
+    public Connection getConnection(String username, String password) {
+        return new CustomConnector().getConnection(this.url, username, password);
     }
 
     @Override
