@@ -28,8 +28,8 @@ public class SimpleJDBCRepository {
 
     public Long createUser(User user) {
         long id = 1L;
-        try (var connection = CustomDataSource.getInstance().getConnection();
-            var statement = connection.prepareStatement(CREATE_USER_SQL, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = CustomDataSource.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(CREATE_USER_SQL, Statement.RETURN_GENERATED_KEYS)) {
             statement.setObject(1, user.getFirstName());
             statement.setObject(2, user.getLastName());
             statement.setObject(3, user.getAge());
@@ -47,8 +47,8 @@ public class SimpleJDBCRepository {
 
     public User findUserById(Long userId) {
         User user = null;
-        try (var connection = CustomDataSource.getInstance().getConnection();
-              var statement = connection.prepareStatement(FIND_USER_BY_ID_SQL)) {
+        try (Connection connection = CustomDataSource.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_ID_SQL)) {
             statement.setLong(1, userId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -62,8 +62,8 @@ public class SimpleJDBCRepository {
 
     public User findUserByName(String userName) {
         User user = null;
-        try (var connection = CustomDataSource.getInstance().getConnection();
-             var statement = connection.prepareStatement(FIND_USER_BY_NAME_SQL)) {
+        try (Connection connection = CustomDataSource.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_NAME_SQL)) {
             statement.setString(1, userName);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -77,8 +77,8 @@ public class SimpleJDBCRepository {
 
     public List<User> findAllUser() {
         List<User> users = new ArrayList<>();
-        try (var connection = CustomDataSource.getInstance().getConnection();
-             var statement = connection.prepareStatement(FIND_ALL_USER_SQL)) {
+        try (Connection connection = CustomDataSource.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_ALL_USER_SQL)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 users.add(buildUser(resultSet));
@@ -90,8 +90,8 @@ public class SimpleJDBCRepository {
     }
 
     public User updateUser(User user) {
-        try (var connection = CustomDataSource.getInstance().getConnection();
-             var statement = connection.prepareStatement(UPDATE_USER_SQL)) {
+        try (Connection connection = CustomDataSource.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_USER_SQL)) {
             statement.setString(1, user.getFirstName());
             statement.setString(2, user.getLastName());
             statement.setInt(3, user.getAge());
@@ -108,8 +108,8 @@ public class SimpleJDBCRepository {
     }
 
     public void deleteUser(Long userId) {
-        try (var connection = CustomDataSource.getInstance().getConnection();
-             var statement = connection.prepareStatement(DELETE_USER)) {
+        try (Connection connection = CustomDataSource.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(DELETE_USER)) {
             statement.setLong(1, userId);
             statement.executeUpdate();
         } catch (SQLException e) {
